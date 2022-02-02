@@ -13,6 +13,13 @@ service Greeter {
       get: "/hello/{name}"
     };
   };
+
+  rpc SayHello1 (HelloRequest) returns (HelloReply){
+    option (google.api.http) = {
+      get: "/hello/{name}"
+    };
+  };
+
   rpc BidiHello(stream HelloRequest) returns (stream HelloReply);
 }
 

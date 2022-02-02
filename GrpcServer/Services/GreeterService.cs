@@ -26,6 +26,19 @@ namespace GrpcServer.Services
             return Task.FromResult(helloReply);
         }
 
+        public override Task<HelloReply> SayHello1(HelloRequest request, ServerCallContext context)
+        {
+            var helloReply = new HelloReply
+            {
+                Message = "Hello " + request.Name
+            };
+
+            // context.Deadline //KeepAlive
+            // context.GetHttpContext
+
+            return Task.FromResult(helloReply);
+        }
+
         public override async Task BidiHello
         (
             IAsyncStreamReader<HelloRequest> requestStream,

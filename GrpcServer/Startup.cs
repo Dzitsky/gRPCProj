@@ -20,9 +20,11 @@ namespace GrpcServer
         {
             services.AddGrpc();
 
-            //services.AddGrpcReflection();
+            services.AddGrpcReflection();
 
             services.AddGrpcHttpApi();
+
+            services.AddCors();
 
             services.AddSwaggerGen(c =>
             {
@@ -45,7 +47,7 @@ namespace GrpcServer
                     {
                         new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference
+                            Reference = new OpenApiReference 
                             {
                                 Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer"
@@ -91,19 +93,21 @@ namespace GrpcServer
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EAP Metadata HTTP API V1"));
 
-            //app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
+            app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
             app.UseRouting();
+
+            app.UseCors("AllowAll");
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<GreeterService>();
 
 
-                //if (env.IsDevelopment())
-                //{
-                //    endpoints.MapGrpcReflectionService();
-                //}
+                if (env.IsDevelopment())
+                {
+                    endpoints.MapGrpcReflectionService();
+                }
 
                 endpoints.MapGet("/",
                 async context =>
